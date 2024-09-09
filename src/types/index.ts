@@ -1,12 +1,13 @@
-export interface TareaType {
+export interface ArticuloType {
     id: number;
     titulo: string;
-    completado: boolean;
+    contenido: string;
+    fecha: string;
+    autor: string;
 }
 
 export interface TablaProps {
-    tareas: TareaType[];
-    onToggleTarea: (id: number) => void;
-    onEliminarTarea: (id: number) => void;
-    onEditarTarea: (id: number) => void;
+    articulos: ArticuloType[];
+    onEliminarArticulo: (id: number) => void;
+    onEditarArticulo: (id: number) => void;
 }

@@ -1,73 +1,55 @@
 import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import {TareaType} from "../types";
+import {ArticuloType} from "../types";
 
-const API_URL = 'http://localhost:3000/tareas';
+const API_URL = 'http://localhost:3000/articulos';
 
 const useCrudAcciones = () => {
-    const [tareas, setTareas] = useState<TareaType[]>([]);
-    const [tarea, setTarea] = useState<TareaType | null>(null);
+    const [articulos, setArticulos] = useState<ArticuloType[]>([]);
+    const [articulo, setArticulo] = useState<ArticuloType | null>(null);
 
     useEffect(() => {
-        cargarTareas();
+        cargarArticulos();
     }, []);
 
     const getMaxId = () => {
-        return tareas.reduce((max, t) => (t.id > max ? t.id : max), 0) + 1;
+        return articulos.reduce((max, a) => (a.id > max ? a.id : max), 0) + 1;
     };
 
-    const cargarTareas = async () => {
+    const cargarArticulos = async () => {
         const response = await axios.get(API_URL);
-        setTareas(response.data);
+        setArticulos(response.data);
     };
 
-    const agregarTarea = async (titulo: string, tarea?: TareaType) => {
-        if (tarea) {
-            await axios.put(`${API_URL}/${tarea.id}`, { ...tarea, titulo });
-            setTareas(
-                tareas.map((t) => (t.id === tarea.id ? { ...t, titulo } : t))
+    const agregarArticulo = async (titulo: string, contenido: string, articulo?: ArticuloType) => {
+        if (articulo) {
+            await axios.put(`${API_URL}/${articulo.id}`, { ...articulo, titulo, contenido });
+            setArticulos(
+                articulos.map((a) => (a.id === articulo.id ? { ...a, titulo, contenido } : a))
             );
-            setTarea(null);
-
-            //Mostrar una alerta de éxito sencilla
-            alerta('Tarea actualizada');
-
+            setArticulo(null);
+            alerta('Artículo actualizado');
             return;
         }
 
-        await axios.post(API_URL, { titulo, completado: false });
-        setTareas([...tareas, { id: getMaxId(), titulo, completado: false }]);
-
-        //Mostrar una alerta de éxito sencilla
-        alerta('Tarea agregada');
+        await axios.post(API_URL, { titulo, contenido, fecha: new Date().toISOString(), autor: 'Autor Desconocido' });
+        setArticulos([...articulos, { id: getMaxId(), titulo, contenido, fecha: new Date().toISOString(), autor: 'Autor Desconocido' }]);
+        alerta('Artículo agregado');
     };
 
-    const editarTarea = (id: number) => {
-        const tarea = tareas.find((t) => t.id === id);
-        if (tarea) {
-            setTarea(tarea);
+    const editarArticulo = (id: number) => {
+        const articulo = articulos.find((a) => a.id === id);
+        if (articulo) {
+            setArticulo(articulo);
         }
     };
 
-    const toggleTarea = async (id: number) => {
-        const tarea = tareas.find((t) => t.id === id);
-        if (tarea) {
-            const estado = !tarea.completado;
-            await axios.put(`${API_URL}/${id}`, { ...tarea, completado: estado });
-            setTareas(
-                tareas.map((t) => (t.id === id ? { ...t, completado: estado } : t))
-            );
-        }
-    };
-
-    const eliminarTarea = async (id: number) => {
-        // Obtenemos la tarea a eliminar
-        const tarea = tareas.find((t) => t.id === id);
-        // Usamos sweetalert2 para confirmar la eliminación
+    const eliminarArticulo = async (id: number) => {
+        const articulo = articulos.find((a) => a.id === id);
         const result = await Swal.fire({
-            title: tarea?.titulo,
-            text: '¿Estás seguro de eliminar esta tarea?',
+            title: articulo?.titulo,
+            text: '¿Estás seguro de eliminar este artículo?',
             icon: 'error',
             showCancelButton: true,
             confirmButtonText: 'Eliminar',
@@ -80,7 +62,7 @@ const useCrudAcciones = () => {
             return;
         }
         await axios.delete(`${API_URL}/${id}`);
-        setTareas(tareas.filter((t) => t.id !== id));
+        setArticulos(articulos.filter((a) => a.id !== id));
     };
 
     const alerta = (title: string) => {
@@ -94,12 +76,11 @@ const useCrudAcciones = () => {
     }
 
     return {
-        tareas,
-        tarea,
-        agregarTarea,
-        editarTarea,
-        toggleTarea,
-        eliminarTarea
+        articulos,
+        articulo,
+        agregarArticulo,
+        editarArticulo,
+        eliminarArticulo
     };
 };
 

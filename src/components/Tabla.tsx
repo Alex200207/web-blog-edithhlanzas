@@ -1,22 +1,20 @@
 import { FC } from 'react';
-import Tarea from './Tarea.tsx';
+import Articulo from './Articulo';
 import {TablaProps} from "../types";
 
 const Tabla: FC<TablaProps> = ({
-  tareas,
-  onEliminarTarea,
-  onToggleTarea,
-  onEditarTarea,
+  articulos,
+  onEliminarArticulo,
+  onEditarArticulo,
 }) => {
   return (
     <ul className="mt-4">
-      {tareas.map((tarea) => (
-        <Tarea
-          key={tarea.id}
-          tarea={tarea}
-          onToggle={() => onToggleTarea(tarea.id)}
-          onEliminar={() => onEliminarTarea(tarea.id)}
-          onEditar={() => onEditarTarea(tarea.id)}
+      {articulos.map((articulo) => (
+        <Articulo
+          key={articulo.id}
+          articulo={articulo}
+          onEliminar={() => onEliminarArticulo(articulo.id)}
+          onEditar={() => onEditarArticulo(articulo.id)}
         />
       ))}
     </ul>

@@ -1,28 +1,21 @@
 import { FC } from 'react';
-import { MdEdit, MdDelete  } from "react-icons/md";
-import {TareaType} from "../types";
+import { MdEdit, MdDelete } from "react-icons/md";
+import {ArticuloType} from "../types";
 
-
-interface TareaProps {
-  tarea: TareaType;
-  onToggle: () => void;
+interface ArticuloProps {
+  articulo: ArticuloType;
   onEliminar: () => void;
   onEditar: () => void;
 }
 
-const Tarea: FC<TareaProps> = ({ tarea, onEliminar, onToggle, onEditar }) => {
+const Articulo: FC<ArticuloProps> = ({ articulo, onEliminar, onEditar }) => {
   return (
     <li className="relative flex items-center justify-between p-2 border-b border-gray-300 hover:bg-gray-400">
-      <div className="flex items-center">
-        <input
-          type="checkbox"
-          checked={tarea.completado}
-          onChange={onToggle}
-          className="mr-2 form-checkbox"
-        />
-        <span className={tarea.completado ? 'line-through' : ''}>
-          {tarea.titulo}
-        </span>
+      <div className="flex-1">
+        <h2 className="font-bold">{articulo.titulo}</h2>
+        <p>{articulo.contenido}</p>
+        <p className="text-sm text-gray-500">{articulo.fecha}</p>
+        <p className="text-sm text-gray-500">{articulo.autor}</p>
       </div>
       <div className="flex gap-4">
         <button
@@ -40,4 +33,4 @@ const Tarea: FC<TareaProps> = ({ tarea, onEliminar, onToggle, onEditar }) => {
   );
 };
 
-export default Tarea;
+export default Articulo;
