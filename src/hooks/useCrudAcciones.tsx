@@ -21,7 +21,7 @@ const useCrudAcciones = () => {
         const response = await axios.get(API_URL);
         setArticulos(response.data);
     };
-
+console.log(articulos);
     const agregarArticulo = async (titulo: string, contenido: string, articulo?: ArticuloType) => {
         if (articulo) {
             await axios.put(`${API_URL}/${articulo.id}`, { ...articulo, titulo, contenido });
